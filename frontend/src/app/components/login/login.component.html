@@ -1,0 +1,28 @@
+<style>
+    form{
+        padding: 100px 0 0 300px;
+        
+
+    }
+    button{
+        padding: 10px 50px 10px 50px ;
+        margin:10px 0 0  250px;
+    }
+    input{
+        
+        width: 800px;
+    }
+</style>
+
+<form  (ngSubmit)="Login()" method="post">
+  <div class="form-group">  
+      <label for="email">Email</label>
+      <input type="text" name="email" class="form-control" [(ngModel)] ="user.email">
+  </div>
+  <div class="form-group">
+      <label for="password">Password</label>
+      <input type="password" name="password" class="form-control" [(ngModel)] ="user.password">
+  </div>
+  
+  <button class="btn btn-dark btn-sm mt-4" >Login</button>
+</form>

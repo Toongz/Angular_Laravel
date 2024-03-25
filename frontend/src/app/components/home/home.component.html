@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - MovieFlix</title>
+    <link rel="stylesheet" href="home.component.css">
+    
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo">
+                <h1>MovieFlix</h1>
+            </div>
+            <div class="navigation">
+                <ul>
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Categories</a></li>
+                    <li><a href="#">Top IMDB</a></li>
+                    <li><a href="#">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+    
+    <!-- Banner -->
+    <section class="banner">
+        
+    </section>
+
+    <!-- Movie List -->
+        <section class="movie-list">
+            <h3>Featured Movies</h3>
+            <div class="  movies" >
+                <!-- Single Movie Item -->
+                <div class="movie" *ngFor="let m of movies"  >
+                    <div routerLink="/detail/{{m.id}}">
+                        <img [src]="'http://localhost:8000/storage/' + m.poster ">
+                    <div class="movie-info">
+                        <h4>{{m.title}}</h4>
+                    </div>
+                    </div>
+                    
+                </div>
+                <!-- Additional movie items here -->
+            </div>
+        </section>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 MovieFlix. All Rights Reserved.</p>
+    </footer>
+</body>
+</html>

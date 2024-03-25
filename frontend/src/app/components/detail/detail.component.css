@@ -1,0 +1,69 @@
+.movie-details {
+    display: flex; /* Sử dụng flexbox để sắp xếp nội dung theo hàng ngang */
+    align-items: flex-start; /* Căn chỉnh các items ở đầu */
+    gap: 20px; /* Khoảng cách giữa các mục */
+    padding: 20px; /* Padding xung quanh nội dung của .movie-details */
+    background-color: #f4f4f4; /* Màu nền */
+    border-radius: 8px; /* Bo góc */
+    margin: 20px; /* Margin xung quanh phần tử */
+  }
+  
+  .poster {
+    position: relative; /* Để button có thể căn tuyệt đối so với .poster */
+    max-width: 250px; /* Chiều rộng tối đa của poster */
+  }
+  
+  .poster img {
+    width: 100%;
+    display: block;
+    border-radius: 8px; /* Bo góc cho hình ảnh */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Tạo hiệu ứng đổ bóng */
+  }
+  
+  .pay-button {
+    position: absolute; /* Căn tuyệt đối so với .poster */
+    bottom: 10px; /* Vị trí từ dưới lên 10px */
+    left: 50%; /* Đặt ở giữa theo chiều ngang của .poster */
+    transform: translateX(-50%); /* Điều chỉnh căn giữa */
+    padding: 10px 20px; /* Padding cho button */
+    font-size: 16px; /* Cỡ chữ */
+    color: #fff; /* Màu chữ */
+    background-color: #007bff; /* Màu nền của button */
+    border: none; /* Bỏ đường viền */
+    border-radius: 20px; /* Bo góc cho button */
+    cursor: pointer; /* Khi hover vào button thì hiển thị con trỏ chuột */
+    transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu khi hover */
+  }
+  
+  .pay-button:hover {
+    background-color: #0056b3; /* Chuyển màu nền khi hover */
+  }
+  
+  .info {
+    flex: 1; /* Cho phần thông tin chiếm hết không gian còn lại */
+    padding: 10px;
+  }
+  
+  .title {
+    margin: 0;
+    font-size: 2em; /* Cỡ chữ lớn cho tiêu đề */
+    color: #333; /* Màu chữ */
+  }
+  
+  .details {
+    margin-top: 1em;
+  }
+  
+  .detail {
+    display: flex; /* Sử dụng flexbox để sắp xếp label và giá trị */
+    margin-bottom: 0.5em; /* Tạo khoảng cách giữa các detail */
+  }
+  
+  .label {
+    font-weight: bold; /* Làm đậm chữ cho label */
+    margin-right: 10px; /* Tạo khoảng cách giữa label và giá trị */
+  }
+  
+  .value {
+    color: #666; /* Màu chữ */
+  }
