@@ -21,7 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role',
+        'isAdmin',
         'balance'
     ];
 
@@ -49,5 +49,11 @@ class User extends Authenticatable
     }
     public function accesses(){
         return $this->hasMany(MovieAccess::class);
+    }
+    public function reviews(){
+        return $this->hasMany(Review::class);
+    }
+    public function wishlists(){
+        return $this->hasMany(Wishlist::class);
     }
 }

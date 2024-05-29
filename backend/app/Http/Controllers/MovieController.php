@@ -7,62 +7,62 @@ use App\Models\Movie;
 use App\Models\Category;
 use Illuminate\Support\Facades\Storage; // Thêm namespace cho Storage facade
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+
+
 
 class MovieController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-        $movies = Movie::all();
-        return response()->json($movies);
-    }
+        public function index()
+        {
+            $movies = Movie::all();
+            return response()->json($movies);
+        }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-        $request->validate([
-            'category_name' => 'required|string|exists:categories,category_name',
-            'title' => 'required',
-            'poster' => 'required|image',
-            'price' => 'nullable|numeric',
-            'description' => 'required'
-        ]);
-        $category = Category::where('category_name',$request->category_name)->first();
-        if(!$category){
-            return response()->json([
-                'message' => 'Không tìm thấy thể loại này'
-            ],404);
+        public function store(Request $request)
+        {
+            $request->validate([
+                'category_name' => 'required|string|exists:categories,category_name',
+                'title' => 'required|string|max:255',
+                'poster' => 'required|image',
+                'film' => 'nullable|mimes:mp4,ogx,oga,ogv,ogg,webm',
+                'price' => 'nullable|numeric',
+                'description' => 'required|string'
+            ]);
+    
+            $category = Category::where('category_name', $request->category_name)->firstOrFail();
+    
+            $posterPath = $this->uploadFile($request->file('poster'), 'images', $request->title);
+            $filmPath = $request->hasFile('film') 
+                ? $this->uploadFile($request->file('film'), 'films', $request->title)
+                : 'no_movie.mp4';
+    
+            $movie = new Movie();
+            $movie->title = $request->title;
+            $movie->poster = $posterPath;
+            $movie->film = $filmPath;
+            $movie->category_id = $category->id;
+            $movie->price = $request->price;
+            $movie->description = $request->description;
+            $movie->save();
+    
+            return response()->json($movie, 201);
         }
-        if($request->hasFile('poster')){
-            $poster = $request->file('poster');
-            $posterName = Str::slug($request->title).'_'.time().'.'.$poster->getClientOriginalExtension();
-            $posterPath = $poster->storeAs('images',$posterName,'public');
-        }
-
-        $movie = new Movie();
-        $movie->title = $request->title;
-        $movie->poster = $posterPath;
-        $movie->category_id = $category->id;
-        $movie->price = $request->price;
-        $movie->description = $request->description;
-        $movie->save();
-        return response()->json($movie);
-    }
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        //
         $movie = Movie::findOrFail($id);
-        return response()->json( $movie, 200);
+        return response()->json($movie, 200);
     }
 
     /**
@@ -70,74 +70,97 @@ class MovieController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
-        // $movie = Movie::findOrFail($id);
+        
+        try {
+            Log::info('Request received for update: ', $request->all()); // Log dữ liệu nhận được
+            $movie = Movie::findOrFail($id);
 
-        // $request->validate([
-        //     'category_name' => 'sometimes|required|string|exists:categories,category_name',
-        //     'title' => 'sometimes|required',
-        //     'price' => 'sometimes|nullable|numeric',
-        //     'description' => 'sometimes|required',
-        //     'poster' => 'sometimes|image',
-        // ]);
-      
-        // if ($request->has('category_name')) {
-        //     $category = Category::where('category_name', $request->category_name)->first();
-           
-        //     if (!$category) {
-        //         return response()->json([
-        //             'message' => 'Không tìm thấy thể loại này'
-        //         ], 404);
-        //     }
-        //     $movie->category_id = $category->id;
-        // }
-    
-        // if ($request->hasFile('poster')) {
-        //     if ($movie->poster && Storage::disk('public')->exists($movie->poster)) {
-        //         Storage::disk('public')->delete($movie->poster);
-        //     }
-        //     $poster = $request->file('poster');
-        //     $posterName = Str::slug($request->title).'_'.time().'.'.$poster->getClientOriginalExtension();
-        //     $posterPath = $poster->storeAs('images', $posterName, 'public');
-        //     $movie->poster = $posterPath;
-        // }
-    
-        // if ($request->has('title')) {
-        //     $movie->title = $request->title;
-        // }
-    
-        // if ($request->has('price')) {
-        //     $movie->price = $request->price;
-        // }
-    
-        // if ($request->has('description')) {
-        //     $movie->description = $request->description;
-        // }
-        //$movie->save();
-        $movie = Movie::findOrFail($id);
-        $movie->update($request->all());
-        return response()->json($movie);
+            $request->validate([
+                'category_name' => 'sometimes|required|string|exists:categories,category_name',
+                'title' => 'sometimes|required|string|max:255',
+                'price' => 'sometimes|nullable|numeric',
+                'description' => 'sometimes|required|string',
+                'poster' => 'sometimes|image',
+                'film' => 'sometimes|mimes:mp4,ogx,oga,ogv,ogg,webm',
+            ]);
+
+            if ($request->has('category_name')) {
+                $category = Category::where('category_name', $request->category_name)->firstOrFail();
+                $movie->category_id = $category->id;
+            }
+
+            if ($request->hasFile('poster')) {
+                $movie->poster = $this->uploadFile($request->file('poster'), 'images', $request->title);
+            }
+
+            if ($request->hasFile('film')) {
+                $movie->film = $this->uploadFile($request->file('film'), 'films', $request->title);
+            }
+
+            $movie->fill($request->only(['title', 'price', 'description']));
+            $movie->save();
+            Log::info('Movie updated successfully: ', $movie->toArray()); // Log dữ liệu sau khi cập nhật
+
+            return response()->json([
+                'message' => 'Cập nhật phim thành công.',
+                'movie' => $movie
+            ], 200);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json(['errors' => $e->errors()], 422);
+        } catch (\Illuminate\Database\Eloquent\ModelNotFoundException $e) {
+            return response()->json(['error' => 'Không tìm thấy phim hoặc thể loại'], 404);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Đã xảy ra lỗi khi cập nhật phim'], 500);
+        }
     }
-
+    
+    private function uploadFile($file, string $folder, string $title)
+    {
+        $filename = Str::slug($title) . '_' . time() . '.' . $file->getClientOriginalExtension();
+        return $file->storeAs($folder, $filename, 'public');
+    }
+    
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
     {
-        //
-        $movie = Movie::findOrFail($id); // Nếu không tìm thấy phim này, một lỗi 404 sẽ được ném ra tự động.
+        $movie = Movie::findOrFail($id);
 
-        // Xóa poster từ storage nếu có
         if ($movie->poster && Storage::disk('public')->exists($movie->poster)) {
             Storage::disk('public')->delete($movie->poster);
         }
-    
-        // Xóa bộ phim từ cơ sở dữ liệu
+        
+        if ($movie->film && Storage::disk('public')->exists($movie->film) && $movie->film !== 'no_movie.mp4') {
+            Storage::disk('public')->delete($movie->film);
+        }
+
         $movie->delete();
-    
-        // Bạn có thể chọn trả về thông báo thành công hoặc không trả về gì cả
+
         return response()->json([
             'message' => 'Phim đã được xóa thành công'
-        ]);
+        ], 200);
     }
+
+    public function filter(Request $request){
+        $filters = $request->only(['tag', 'search']);
+        $movies = Movie::latest()->filter($filters)->get();
+
+        return response()->json([
+            'movies' => $movies
+        ], 200);
+    }
+    public function getFreeMovies(Request $request)
+    {
+        $freeMovies = Movie::where('price', 0)->orWhereNull('price')->paginate(4);  
+        return response()->json($freeMovies);
+    }
+
+    public function getPaidMovies(Request $request)
+    {
+        $paidMovies = Movie::where('price', '>', 0)->paginate(4);
+        return response()->json($paidMovies);
+    }
+    
 }

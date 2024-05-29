@@ -1,24 +1,42 @@
-<div class="movie-details">
-    <div class="poster">
-        <img [src]="'http://localhost:8000/storage/' + movie.poster ">
-         <button class="pay-button" (click)="Payment()">Pay Now</button>
-    </div>
-    <div class="info">
-        <h2 class="title">Inception</h2>
-        <div class="details">
-            <div class="detail">
-                <span class="label">Name:</span>
-                <span class="value" >{{movie.title}}</span>
-            </div>
-            <div class="detail">
-                <span class="label">Descripsion:</span>
-                <span class="value" >{{movie.description}}</span>
-            </div>
-            <div class="detail">
-                <span class="label">Price:</span>
-                <span class="value" >{{movie.price}}</span>
-            </div>
-            
+<app-navbar></app-navbar>
+<div class="container my-5">
+  <div class="card shadow-lg">
+    <div class="card-body">
+      <div class="row">
+
+        <div class="col-md-4">
+          <img [src]="'http://127.0.0.1:8000/storage/'+movie.poster" alt="" class="movie-image img-fluid rounded mb-3">
         </div>
+
+        <div class="col-md-8">
+          <h3 class="mb-3 text-gray-800 font-semibold">{{ movie.title }}</h3>
+          <p class="text-lg" *ngIf="movie.price && movie.price > 0">Giá: <span class="text-gray-600">{{ movie.price }}$</span></p>
+          <p class="text-lg">Thể loại: <span class="text-gray-600" >{{ movie.category_name }}  </span></p>
+          <p class="text-lg">Đánh giá:<span *ngIf="rating && rating > 0; else noRating" class="text-yellow-400">{{ rating | number:'1.0-1' }}<i class="fa fa-star"></i></span>
+            <ng-template #noRating>Chưa có đánh giá</ng-template>
+          </p>
+
+
+          <div class="mb-4">
+            <h5 class="font-semibold">Mô tả:</h5>
+            <p class="text-gray-700">{{ movie.description }}</p>
+          </div>
+
+          <button *ngIf="!isPaid" class="btn btn-primary btn-lg" (click)="payment()">
+            <i class="fas fa-shopping-cart me-2"></i>Mua
+          </button>
+          <button *ngIf="isPaid" class="btn btn-success btn-lg" [routerLink]="['/movie', movie.id]">
+            <i class="fas fa-play me-2"></i>Xem Phim
+          </button>
+          <button (click)="isWishlist ? deleteWishlist() : addWishlist()" 
+        class="btn border" 
+        [class.bg-danger]="isWishlist" 
+        [class.text-white]="isWishlist">
+  <i class="fas" [class.fa-heart]="!isWishlist" [class.fa-heart-broken]="isWishlist" me-2></i>
+  {{ isWishlist ? ' Remove from Wishlist' : ' Add to Wishlist' }}
+</button>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

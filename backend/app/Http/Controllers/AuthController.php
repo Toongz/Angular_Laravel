@@ -9,18 +9,15 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 class AuthController extends Controller
 {
-    //
-    public function GetUser(){
-        $user = auth()->user();
-        return response()->json($user,200);
-    }
-
-    public function Login(Request $request){
+  
+    public function login(Request $request){
+        
         $validator = Validator::make($request->all(),
         [
             'email' => 'required|email',
             'password' =>   'required'
         ]);
+        
         if($validator->fails()){
             return response()->json([
                 'status' => false,
@@ -28,13 +25,16 @@ class AuthController extends Controller
                 'errors' => $validator->errors(),
             ],422);
         }
+        
         if(!Auth::attempt($validator->validated())){
             return response()->json([
                 'status' => false,
                 'message' => 'Email hoặc mật khẩu không đúng'
             ],401);
         }
+       
         $user = Auth::user();
+       
         $token = $user->createToken('API TOKEN')->plainTextToken;
         return response()->json([
             'status' => true,
@@ -43,8 +43,8 @@ class AuthController extends Controller
         ],200);
     }
 
-    
-    public function Register(Request $request){
+    public function register(Request $request){
+       
         $validator = Validator::make($request->all(),[
             'name' => 'required',
             'email' => 'required|email|unique:users,email',
@@ -60,8 +60,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role' => 'user',
+            'password' => Hash::make($request->password),   
             'balance' => 0
         ]);
         $token = $user->createToken('API TOKEN')->plainTextToken;
@@ -72,8 +71,7 @@ class AuthController extends Controller
         ],201);
 
     }
-
-    public function Logout(){
+    public function logout(){
         auth()->user()->currentAccessToken()->delete();
         return response()->json([
             'message' => 'Đăng xuất thành công'
