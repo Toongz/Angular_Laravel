@@ -1,0 +1,45 @@
+<form (ngSubmit)="movie.id ? updateMovie() : addMovie()" enctype="multipart/form-data">
+      <div class="d-flex flex-row bd-highlight mb-3">
+
+        <div class="p-2 w-60 bd-highlight">
+          <div class="form-group">
+            <label for="title" class="col-form-label">Title</label>
+            <input type="text" id="title" placeholder="Title" class="form-control" [(ngModel)]="movie.title" name="title">
+          </div>
+      
+          <div class="form-group">
+            <label for="genre" class="col-form-label">Category</label>
+          
+            <select class="form-control" [(ngModel)]="movie.category_name" name="category_name">
+              <option value="">--Select--</option>
+              <option *ngFor="let c of lstCategory" [value]="c.category_name">
+                  {{c.category_name}}
+              </option>
+            </select>
+          </div>
+      
+          <div class="form-group">
+            <label for="price" class="col-form-label">Price</label>
+            <input type="number" id="price" placeholder="Price" class="form-control" [(ngModel)]="movie.price" name="price">
+          </div>
+      
+          <div class="form-group">
+            <label for="description" class="col-form-label">Description</label>
+            <input type="text" id="description" placeholder="Description" class="form-control" [(ngModel)]="movie.description" name="description">
+          </div>
+        </div>
+      
+        <div class="p-2 bd-highlight" style="width: 40%;">
+          <img [src]="'http://127.0.0.1:8000/storage/'+ movie.poster" alt="Poster Image" height="250" width="200">
+          
+          <input type="file" class="form-control" (change)="onImageChange($event)" name="poster" accept="image/*">
+          <video [src]="'http://127.0.0.1:8000/storage/'+ movie.film" controls height="250" width="200"></video>
+          <input type="file" class="form-control" (change)="onVideoChange($event)" name="film" accept="video/*">
+        </div>
+      
+      </div>
+    
+      <button type="submit" class="btn" [ngClass]="{'btn-secondary': movie.id, 'btn-primary': !movie.id}">
+        {{ movie.id ? 'Update Movie' : 'Add Movie' }}
+      </button>
+</form>

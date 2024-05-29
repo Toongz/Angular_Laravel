@@ -1,0 +1,149 @@
+<app-navbar></app-navbar>
+<div class="container my-5">
+  <!-- Movie Player Container -->
+  <div class="row mb-4">
+    <div class="col-12">
+      <!-- Replace 'movie-source.mp4' with the actual source file of your movie -->
+      <video id="moviePlayer" class="w-100" controls>
+        <source src="movie-source.mp4" type="video/mp4">
+        Trình duyệt của bạn không hỗ trợ thẻ video.
+      </video>
+    </div>
+  </div>
+
+  <!-- Movie Details (Optional) -->
+  <div class="row">
+    <div class="col-12">
+   
+      <h3>{{movie.title}} </h3>
+
+    </div>
+  </div>
+
+  
+  <div class="container mb-5">
+   
+    <div class="mb-4">
+      <form id="commentForm" (ngSubmit)="submitRating()">
+        
+        <div class="mb-3">
+          <label for="userRating" class="form-label">Đánh Giá:</label>
+          <select class="form-select" id="userRating" name="userRating" required [(ngModel)]="userRating">
+            <option value="" selected>Cho điểm...</option>
+            <option value="5">5 Sao</option>
+            <option value="4">4 Sao</option>
+            <option value="3">3 Sao</option>
+            <option value="2">2 Sao</option>
+            <option value="1">1 Sao</option>
+          </select>
+        </div>
+        
+  
+        <div class="mb-3">
+          <label for="userComment" class="form-label">Bình Luận:</label>
+          <textarea class="form-control" id="userComment" name="userComment" rows="3" placeholder="Nhập bình luận của bạn" required [(ngModel)]="userComment"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">Gửi Bình Luận</button>
+      </form>
+    </div>
+
+
+    <div id="commentsList">
+
+      <div class="card mb-4" *ngFor="let c of reviews">
+        <div class="card-body">
+          <h5 class="card-title">{{c.user?.name}}</h5>
+          <div class="mb-2">
+            <span>Điểm đánh giá: </span>
+           
+            <strong>{{c.rating}} Sao</strong>
+          </div>
+          <p class="card-text">{{c.rate_content}}</p>
+          <p class="card-text"><small class="text-muted">Ngày bình luận: {{c.created_at}}</small></p>
+        </div>
+      </div>
+     
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+<!-- 
+<div class="container my-5">
+  
+  <div class="row mb-4">
+    <div class="col-12">
+    
+      <video id="moviePlayer" class="w-100" controls>
+        <source src="movie-source.mp4" type="video/mp4">
+        Trình duyệt của bạn không hỗ trợ thẻ video.
+      </video>
+    </div>
+  </div>
+
+  
+    <div class="col-12">
+     
+      <h3>Tên Phim</h3>
+ 
+    </div>
+  </div> -->
+
+
+  
+<!-- <div class="container mb-5">
+  <div class="container mb-5">
+   
+    <div class="mb-4">
+      <form id="commentForm" method="post" (ngSubmit)="submitRating()">
+       
+        <div class="mb-3">
+          <label for="userRating" class="form-label">Đánh Giá:</label>
+          <select class="form-select" id="userRating" required  [(ngModel)]="userRating">
+            <option value="" selected>Cho điểm...</option>
+            <option value="5">5 Sao</option>
+            <option value="4">4 Sao</option>
+            <option value="3">3 Sao</option>
+            <option value="2">2 Sao</option>
+            <option value="1">1 Sao</option>
+          </select>
+        </div>
+        
+      
+        <div class="mb-3">
+          <label for="userComment" class="form-label">Bình Luận:</label>
+          <textarea class="form-control" id="userComment" rows="3" placeholder="Nhập bình luận của bạn" required [(ngModel)]="userComment"></textarea>
+        </div>
+        <button  class="btn btn-primary">Gửi Bình Luận</button>
+      </form>
+    </div>
+
+    
+    <div id="commentsList">
+      
+      <div class="card mb-4">
+        <div class="card-body">
+          <h5 class="card-title">Tên người bình luận</h5>
+          <div class="mb-2">
+            <span>Điểm đánh giá: </span>
+            
+            <strong>x Sao</strong>
+          </div>
+          <p class="card-text">Nội dung bình luận.</p>
+          <p class="card-text"><small class="text-muted">Ngày bình luận</small></p>
+        </div>
+      </div>
+      
+    </div>
+  </div>  
+  
+
+  
+</div>
+
+</div> -->
+

@@ -1,0 +1,31 @@
+/* navbar.component.css or styles.css */
+.section-search-results {
+    padding: 20px;
+    background-color: #f8f9fa; /* Màu nền nhẹ nhàng cho section */
+    border-radius: 8px; /* Bo góc cho section */
+  }
+  
+  .section-title {
+    color: #333; /* Màu chữ đậm để nổi bật hơn */
+    font-size: 1.75rem; /* Cỡ chữ lớn và rõ ràng */
+    text-align: center; /* Canh giữa tiêu đề */
+    margin-bottom: 2rem; /* Khoảng cách dưới tiêu đề */
+  }
+  
+  .movie-thumbnail {
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.1); /* Đổ bóng nhẹ cho card */
+    transition: transform 0.3s ease-in-out; /* Hiệu ứng khi di chuột qua */
+  }
+  
+  .movie-thumbnail:hover {
+    transform: scale(1.03); /* Phóng to nhẹ khi di chuột qua */
+  }
+  
+  .card-title {
+    font-size: 1.1rem; /* Cỡ chữ cho tiêu đề phim */
+    margin-bottom: 0.5rem; /* Khoảng cách dưới tiêu đề phim */
+  }
+  
+  .alert-warning {
+    font-size: 1rem; /* Kích thước chữ cho thông báo */
+  }

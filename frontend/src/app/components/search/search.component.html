@@ -1,0 +1,28 @@
+<app-navbar></app-navbar>
+<!-- Kết quả tìm kiếm hiển thị nếu có -->
+<!-- Phần hiển thị kết quả tìm kiếm -->
+<div *ngIf="lstMovie.length > 0; else noResultsTemplate">
+    <!-- Sử dụng class 'section-search-results' để có thể tùy biến CSS cho phần này -->
+    <div class="section-search-results">
+      <h2 class="section-title mb-4">Kết quả tìm kiếm</h2>
+      <div class="row g-4">
+        <!-- Sử dụng Bootstrap card để hiển thị thông tin phim -->
+        <div class="col-md-3" *ngFor="let m of lstMovie">
+          <div class="card h-100 movie-thumbnail">
+            <img [src]="'http://127.0.0.1:8000/storage/'+m.poster" class="card-img-top" alt="{{ m.title }}">
+            <div class="card-body">
+              <h5 class="card-title">{{ m.title }}</h5>
+              <a [routerLink]="['/detail', m.id]" class="stretched-link"></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Template thông báo không có kết quả -->
+  <ng-template #noResultsTemplate>
+    <div class="alert alert-warning text-center" role="alert">
+      <i class="bi bi-exclamation-triangle-fill"></i> Không tìm thấy kết quả nào phù hợp.
+    </div>
+  </ng-template>

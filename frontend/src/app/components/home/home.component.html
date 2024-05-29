@@ -1,56 +1,65 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home - MovieFlix</title>
-    <link rel="stylesheet" href="home.component.css">
-    
-</head>
-<body>
-    <!-- Header -->
-    <header>
-        <nav>
-            <div class="logo">
-                <h1>MovieFlix</h1>
-            </div>
-            <div class="navigation">
-                <ul>
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Categories</a></li>
-                    <li><a href="#">Top IMDB</a></li>
-                    <li><a href="#">Contact</a></li>
-                </ul>
-            </div>
-        </nav>
-    </header>
-    
-    <!-- Banner -->
-    <section class="banner">
-        
-    </section>
 
-    <!-- Movie List -->
-        <section class="movie-list">
-            <h3>Featured Movies</h3>
-            <div class="  movies" >
-                <!-- Single Movie Item -->
-                <div class="movie" *ngFor="let m of movies"  >
-                    <div routerLink="/detail/{{m.id}}">
-                        <img [src]="'http://localhost:8000/storage/' + m.poster ">
-                    <div class="movie-info">
-                        <h4>{{m.title}}</h4>
-                    </div>
-                    </div>
-                    
-                </div>
-                <!-- Additional movie items here -->
-            </div>
-        </section>
+  <app-navbar></app-navbar>
 
-    <!-- Footer -->
-    <footer>
-        <p>&copy; 2024 MovieFlix. All Rights Reserved.</p>
-    </footer>
-</body>
-</html>
+
+
+
+<div class="container my-4 movies-section">
+  <section class="free-movies mb-5">
+    <h2 class="section-title mb-4">Phim miễn phí</h2>
+    <div class="row g-4">
+      <div class="col-md-3" *ngFor="let m of moviesFree">
+       
+        <div class="card movie-thumbnail h-100" [routerLink]="['/detail', m.id]">
+          <img [src]="'http://127.0.0.1:8000/storage/'+m.poster" class="card-img-top" alt="{{ m.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ m.title }}</h5>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-outline-primary me-2 bg-transparent border border-solid border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 ease-linear transition-all duration-150" (click)="prevPage()" [disabled]="currentPageFree === 1">
+      <i class="fa fa-chevron-left"></i> 
+    </button>
+    
+    <!-- Hiển Thị Số Trang Hiện Tại và Tổng Số Trang -->
+    <span class="current-page mx-2">{{ currentPageFree }} / {{ totalPagesFree }}</span>
+    
+    <!-- Nút Trang Tiếp Theo -->
+    <button class="btn btn-outline-primary ms-2 bg-transparent border border-solid border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none ml-2 mb-1 ease-linear transition-all duration-150" (click)="nextPage()" [disabled]="currentPageFree === totalPagesFree">
+       <i class="fa fa-chevron-right"></i>
+    </button>
+  </section>
+
+  <section class="paid-movies">
+    <h2 class="section-title mb-4">Phim trả phí</h2>
+    <div class="row g-4">
+      <div class="col-md-3" *ngFor="let m of moviesPaid">
+        <div class="card movie-thumbnail h-100" [routerLink]="['/detail', m.id]">
+          <img [src]="'http://127.0.0.1:8000/storage/'+m.poster" class="card-img-top" alt="{{ m.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ m.title }}</h5>
+            
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="btn btn-outline-primary me-2 bg-transparent border border-solid border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none mr-2 mb-1 ease-linear transition-all duration-150" (click)="prevPage()" [disabled]="currentPagePaid === 1">
+      <i class="fa fa-chevron-left"></i> 
+    </button>
+    
+    <!-- Hiển Thị Số Trang Hiện Tại và Tổng Số Trang -->
+    <span class="current-page mx-2">{{ currentPagePaid }} / {{ totalPagesPaid }}</span>
+    
+    <!-- Nút Trang Tiếp Theo -->
+    <button class="btn btn-outline-primary ms-2 bg-transparent border border-solid border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white active:bg-blue-600 font-bold uppercase text-xs px-4 py-2 rounded outline-none focus:outline-none ml-2 mb-1 ease-linear transition-all duration-150" (click)="nextPage()" [disabled]="currentPagePaid === totalPagesPaid">
+       <i class="fa fa-chevron-right"></i>
+    </button>
+  </section>
+
+
+
+</div>
+
+

@@ -1,0 +1,11 @@
+<div class="d-flex flex-row bd-highlight mb-3">
+  <div class="p-2 w-100 bd-highlight">
+      <div class="form-group">
+          <label for="category" class="col-form-label">Category name</label>
+          <input type="text" id="category" placeholder="Category name"
+                 class="form-control" [(ngModel)]="category.category_name"
+                 name="category_name">
+      </div>
+      <button (click)="addCategory()" class="btn btn-primary">Add Category</button>
+  </div>
+</div>

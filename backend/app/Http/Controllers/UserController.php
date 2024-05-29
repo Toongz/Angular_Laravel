@@ -8,18 +8,36 @@ use App\Models\User;
 use App\Models\Movie;
 use App\Models\Transacsion;
 use App\Models\MovieAccess;
+use App\Models\Review;
+use App\Models\Wishlist;
 
 class UserController extends Controller
 {
     //
-    public function GetBalance(Request $request){
+    public function getUser(){
+        $user = auth()->user();
+        return response()->json($user,200);
+    }
+    public function getUserByUserId($id){
+        $user = User::where(['id' => $id])->first();
+        return response()->json($user);
+    }
+    public function isAdmin(){
+        $user = auth()->user();
+        if($user->isAdmin){
+            return response()->json('',200);
+        }
+        return response()->json(['message' => 'Không phải admin'],403);
+    }
+
+    public function getBalance(Request $request){
         $user = auth()->user();
         $balance = $user->balance;
         return response()->json([
             'message' => 'Số dư tài khoản là: ' . $balance
         ]);
     }
-    public function Deposit(Request $request){
+    public function deposit(Request $request){
         $user = auth()->user();
         $balance = $user->balance;
         $amount = $request->input('amount');
@@ -32,7 +50,7 @@ class UserController extends Controller
         return response()->json(['message' => 'Số dư mới là: '. $newBalance]);
     }
     
-    public function Payment(Request $request){
+    public function payment(Request $request){
         $validatedData = $request->validate([
             'user_id' => 'required|exists:users,id',
             'movie_id' => 'required|exists:movies,id'
@@ -70,7 +88,27 @@ class UserController extends Controller
                 'error' => $e->getMessage()
             ],500);
         }
-
     }
+
+    public function checkPayment(Request $request){
+        $user_id = $request->input('user_id');
+        $movie_id = $request->input('movie_id');
+
+        $movie = Movie::find($movie_id);
+        $isFree = $movie->price == 0 || is_null($movie->price);
+        if ($isFree) {
+            return response()->json(['isPaid' => true]);
+        }
+        $payment = MovieAccess::where('user_id', $user_id)
+                                ->where('movie_id', $movie_id)
+                                ->first();
+        return response()->json([
+            'isPaid' => !is_null($payment)
+        ]);
+    }
+
+    
+    
+    
 
 }
